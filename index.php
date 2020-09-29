@@ -1,3 +1,8 @@
+<?php 
+include('dbconnect.php');
+var_dump($db);
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,8 +19,8 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="index.php"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="new.php"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -23,19 +28,19 @@
             <div class="container">
                 <div class="entry-list">
                     <article>
-                        <h2><a href="detail.html">The best day I’ve ever had</a></h2>
+                        <h2><a href="detail.php">The best day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
                     <article>
-                        <h2><a href="detail_2.html">The absolute worst day I’ve ever had</a></h2>
+                        <h2><a href="detail_2.php">The absolute worst day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
                     <article>
-                        <h2><a href="detail_3.html">That time at the mall</a></h2>
+                        <h2><a href="detail_3.php">That time at the mall</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
                     <article>
-                        <h2><a href="detail_4.html">Dude, where’s my car?</a></h2>
+                        <h2><a href="detail_4.php">Dude, where’s my car?</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
                 </div>
