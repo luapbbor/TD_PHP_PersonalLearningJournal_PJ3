@@ -1,3 +1,37 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = filter_input(INPUT_POST, 'title',FILTER_SANITIZE_STRING);
+    // $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING)); 
+    // $time_spent = trim(filter_input(INPUT_POST, 'time-spent', FILTER_SANITIZE_STRING)); 
+    // $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING)); 
+    // $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
+     
+    //   if (empty($title) || empty($date) || empty($time_spent) || empty($learned) || empty($resources)) {
+    //     $error_message = "Please fill in the required fields Title, Category";
+    // //   } else {
+    //     if(add_journal_entry($title)) {
+    //       header('Location: index.php');
+    //       exit;
+    //     } else {
+    //      $error_message = "Could not add journal entry"; 
+    //     }
+    // //   }
+
+$sql = 'INSERT INTO entries (title) VALUES ("my new title")';
+
+$results = $db->query($sql);
+// var_dump($results);
+// $results->bindParam(1,$title,PDO::PARAM_STR);
+// $results->bindValue(2,$date,PDO::PARAM_STR);
+// $results->bindValue(3,$time_spent,PDO::PARAM_INT);
+// $results->bindValue(4,$learned,PDO::PARAM_STR);
+// $results->bindValue(5,$resources,PDO::PARAM_STR);
+// $results->execute();
+}
+
+?> 
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,16 +48,18 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="index.php"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="new.php"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
+                
             </div>
         </header>
         <section>
             <div class="container">
+                
                 <div class="new-entry">
                     <h2>New Entry</h2>
-                    <form>
+                    <form action="new.php" method="post">
                         <label for="title"> Title</label>
                         <input id="title" type="text" name="title"><br>
                         <label for="date">Date</label>

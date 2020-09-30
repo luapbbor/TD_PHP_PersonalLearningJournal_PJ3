@@ -1,6 +1,19 @@
 <?php 
-include('dbconnect.php');
-var_dump($db);
+
+
+
+function get_journal_entries() {
+    include('dbconnect.php');
+     try {
+     return $db->query('SELECT * FROM entries');
+     } catch (Exception $e) {
+       echo "Error!:" . $e->getMessage() . "</br>";
+       return array();
+     }
+     
+   }
+   
+
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +30,7 @@ var_dump($db);
     </head>
     <body>
         <header>
+           
             <div class="container">
                 <div class="site-header">
                     <a class="logo" href="index.php"><i class="material-icons">library_books</i></a>
@@ -27,7 +41,20 @@ var_dump($db);
         <section>
             <div class="container">
                 <div class="entry-list">
-                    <article>
+                <?php
+                foreach(get_journal_entries() as $entry) {
+                    echo "<article>";
+                    echo "<h2>";
+                    echo "<li><a href='detail.php?id=" .$entry['id'] . "'>" .
+                    $entry['title'] . "</a></li>";
+                    echo "<time>";
+                    echo $entry['date'];
+                    echo "</time>";
+                    echo "</h2>";
+                    echo "</article>";
+                }
+                ?>
+                    <!-- <article> 
                         <h2><a href="detail.php">The best day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
@@ -42,7 +69,7 @@ var_dump($db);
                     <article>
                         <h2><a href="detail_4.php">Dude, where’s my car?</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
+                    </article> -->
                 </div>
             </div>
         </section>
