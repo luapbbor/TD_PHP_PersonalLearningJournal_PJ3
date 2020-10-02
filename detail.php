@@ -1,3 +1,19 @@
+<?php 
+include('inc/functions.php');
+
+error_reporting(E_ALL);
+ini_set('display_errors','On');
+
+// Get the id from the URL and filter it
+if(isset($_GET['id'])) {
+    $entry_id = filter_input(INPUT_GET, 'id',FILTER_SANITIZE_NUMBER_INT);
+    $journal_entry = get_journal_entry($entry_id);
+} 
+
+
+?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,8 +30,8 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="index.php"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="new.php"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -23,31 +39,44 @@
             <div class="container">
                 <div class="entry-list single">
                     <article>
-                        <h1>The best day I’ve ever had</h1>
-                        <time datetime="2016-01-31">January 31, 2016</time>
+                          <?php
+                          echo "<h1>" . $journal_entry['title'] . "</h1>";                        
+                          echo "<time>" . $journal_entry['date'] . "</time>";
+                        ?>
                         <div class="entry">
                             <h3>Time Spent: </h3>
-                            <p>15 Hours</p>
+                        <p>    
+                         <?php
+                          echo $journal_entry['time_spent'];
+                         ?>
+                        </p> 
                         </div>
                         <div class="entry">
                             <h3>What I Learned:</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque.</p>
-                            <p>Cras egestas ac ipsum in posuere. Fusce suscipit, libero id malesuada placerat, orci velit semper metus, quis pulvinar sem nunc vel augue. In ornare tempor metus, sit amet congue justo porta et. Etiam pretium, sapien non fermentum consequat, <a href="">dolor augue</a> gravida lacus, non accumsan. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien.</p>
+                            <p>
+                                <?php 
+                                echo $journal_entry['learned'];
+                                ?>
+                            </p>
                         </div>
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
-                            <ul>
-                                <li><a href="">Lorem ipsum dolor sit amet</a></li>
-                                <li><a href="">Cras accumsan cursus ante, non dapibus tempor</a></li>
-                                <li>Nunc ut rhoncus felis, vel tincidunt neque</li>
-                                <li><a href="">Ipsum dolor sit amet</a></li>
-                            </ul>
+                            <p>
+                            <?php 
+                                echo $journal_entry['resources'];
+                                ?>
+                            </p>    
                         </div>
                     </article>
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.php">Edit Entry</a></p>
+            <p>
+            <?php    
+            echo "<a href='edit.php?id=" .$entry_id. "'>Edit Entry</a></li>";
+            ?>
+            </p>
+              
             </div>
         </section>
         <footer>

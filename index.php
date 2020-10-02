@@ -1,18 +1,19 @@
 <?php 
+include('./inc/functions.php');
 
-
-
-function get_journal_entries() {
-    include('dbconnect.php');
-     try {
-     return $db->query('SELECT * FROM entries');
-     } catch (Exception $e) {
-       echo "Error!:" . $e->getMessage() . "</br>";
-       return array();
-     }
-     
-   }
-   
+// If a form was posted with POST method, look for the input with name delete
+if(isset($_POST['delete'])) {
+    $entry_id = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT);
+    // call the function to delete the entry with the id
+    if(delete_entry($entry_id)){
+      header('location: index.php?msg=Task+Deleted' );
+      exit;
+    } else {
+     header('location: index.php?msg=Unable+To+Delete+Task' . $entry_id);
+      exit;
+    }
+  }
+  
 
 ?>
 
@@ -51,7 +52,14 @@ function get_journal_entries() {
                     echo $entry['date'];
                     echo "</time>";
                     echo "</h2>";
+                    echo "<form method='post' action='index.php' onsubmit=\"return
+                    confirm('Are you sure you want to delete this task?');\">\n";
+              echo "<input type='hidden' value='". $entry['id'] . "' name='delete'
+                   ?>\n";
+              echo "<input type='submit' class='button button-secondary' value='Delete' />\n";
+              echo "</form>";
                     echo "</article>";
+                   
                 }
                 ?>
                     <!-- <article> 

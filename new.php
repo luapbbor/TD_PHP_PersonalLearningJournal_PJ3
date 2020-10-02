@@ -1,33 +1,28 @@
 <?php
+$error_message = " ";
+include('inc/functions.php');
+// If a form was posted with POST method
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get all the input from form and filter it
     $title = filter_input(INPUT_POST, 'title',FILTER_SANITIZE_STRING);
-    // $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING)); 
-    // $time_spent = trim(filter_input(INPUT_POST, 'time-spent', FILTER_SANITIZE_STRING)); 
-    // $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING)); 
-    // $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
-     
-    //   if (empty($title) || empty($date) || empty($time_spent) || empty($learned) || empty($resources)) {
-    //     $error_message = "Please fill in the required fields Title, Category";
-    // //   } else {
-    //     if(add_journal_entry($title)) {
-    //       header('Location: index.php');
-    //       exit;
-    //     } else {
-    //      $error_message = "Could not add journal entry"; 
-    //     }
-    // //   }
-
-$sql = 'INSERT INTO entries (title) VALUES ("my new title")';
-
-$results = $db->query($sql);
-// var_dump($results);
-// $results->bindParam(1,$title,PDO::PARAM_STR);
-// $results->bindValue(2,$date,PDO::PARAM_STR);
-// $results->bindValue(3,$time_spent,PDO::PARAM_INT);
-// $results->bindValue(4,$learned,PDO::PARAM_STR);
-// $results->bindValue(5,$resources,PDO::PARAM_STR);
-// $results->execute();
+    $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
+    $time_spent = filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING);
+    $learned = filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING);
+    $resources = filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING);
+    // If title, time spent or learned are empty show error
+    if (empty($title) || empty($time_spent)|| empty($learned)) {
+        $error_message = "Please fill in required fields - Title, Time Spent & Learned. ";
+    } else {
+        // Else call the function to add the new journal entry into the database
+        if(add_journal_entry($title,$date,$time_spent,$learned,$resources)){
+            header('Location: index.php');
+            exit;
+        } else {
+            $error_message = "Sorry, could not add your Journal entry";
+        }
+    }
 }
+
 
 ?> 
 
@@ -58,8 +53,9 @@ $results = $db->query($sql);
             <div class="container">
                 
                 <div class="new-entry">
+                <?php echo $error_message; ?>
                     <h2>New Entry</h2>
-                    <form action="new.php" method="post">
+                    <form method="post">
                         <label for="title"> Title</label>
                         <input id="title" type="text" name="title"><br>
                         <label for="date">Date</label>
@@ -71,7 +67,7 @@ $results = $db->query($sql);
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
                         <input type="submit" value="Publish Entry" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
+                        <a href="index.php" class="button button-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
