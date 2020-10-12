@@ -1,15 +1,14 @@
 <?php 
 include('inc/functions.php');
 
-error_reporting(E_ALL);
-ini_set('display_errors','On');
-
 // Get the id from the URL and filter it
 if(isset($_GET['id'])) {
     $entry_id = filter_input(INPUT_GET, 'id',FILTER_SANITIZE_NUMBER_INT);
     $journal_entry = get_journal_entry($entry_id);
+    
+    $tags = get_tags($entry_id);
+  
 } 
-
 
 ?>
 
@@ -66,6 +65,20 @@ if(isset($_GET['id'])) {
                                 echo $journal_entry['resources'];
                                 ?>
                             </p>    
+                        </div>
+                        <div class="entry">
+                            <h3>Tags:</h3>
+                            
+                            <ul>
+                            <?php 
+                               foreach($tags as $tag) {   
+                               echo "<li>";                        
+                               echo "<a href='tags.php'>" . $tag['tag_name'] . " </a>";
+                               echo "</li>";
+                               }                                
+                            ?>
+                            </ul>                            
+                              
                         </div>
                     </article>
                 </div>

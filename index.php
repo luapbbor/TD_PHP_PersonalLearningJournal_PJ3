@@ -3,16 +3,19 @@ include('./inc/functions.php');
 
 // If a form was posted with POST method, look for the input with name delete
 if(isset($_POST['delete'])) {
-    $entry_id = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT);
+$entry_id = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT);
     // call the function to delete the entry with the id
     if(delete_entry($entry_id)){
-      header('location: index.php?msg=Task+Deleted' );
-      exit;
+        
     } else {
-     header('location: index.php?msg=Unable+To+Delete+Task' . $entry_id);
-      exit;
+        delete_tags($entry_id);
+        header('Location: index.php');
+        exit;
     }
-  }
+
+    
+    
+}
   
 
 ?>
@@ -58,9 +61,11 @@ if(isset($_POST['delete'])) {
                    ?>\n";
               echo "<input type='submit' class='button button-secondary' value='Delete' />\n";
               echo "</form>";
+                          
                     echo "</article>";
                    
                 }
+                
                 ?>
                     <!-- <article> 
                         <h2><a href="detail.php">The best day I’ve ever had</a></h2>
