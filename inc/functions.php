@@ -27,13 +27,13 @@ try {
   $results->bindValue(1,$entry_id,PDO::PARAM_INT);
   $results->execute();
   return $results->fetch(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
+  } catch (Exception $e) {
   echo $e->getMessage();
   return false;
-} 
+  } 
 }
 
-// Gets all the tags from the tags table
+// This function Gets all the tags from the tags table
 function get_all_tags() {
   include('dbconnect.php');
   $sql = 'SELECT * FROM tags';
@@ -66,9 +66,9 @@ function get_tags($entry_id) {
     echo $e->getMessage();
     return false;
   }  
- }
+}
 
-// This function gets a list of entries that are related to a tag
+// This function gets a list of journal entries that are related to a tag
 // @param $tag_id is obtain from the URL
 function get_entries_by_tag($tag_id) {
   include('dbconnect.php');
@@ -86,7 +86,7 @@ function get_entries_by_tag($tag_id) {
     echo $e->getMessage();
     return false;
   }  
- }
+}
 
 
 // This function returns the id of the last entered journal entry from the "entries" table
@@ -115,21 +115,21 @@ function get_latest_entry() {
 // This function adds a new journal entry into the database table "entries"
 // @param $title, $date, $time_spent, $learned and $resources are all obtained from the form input
 function add_journal_entry($title,$date,$time_spent,$learned,$resources) {
-include('dbconnect.php');
-$sql = 'INSERT INTO entries(title,date,time_spent,learned,resources) VALUES(?,?,?,?,?)';
-try {
-  $results = $db->prepare($sql);
-  $results->bindValue(1,$title,PDO::PARAM_STR);
-  $results->bindValue(2,$date,PDO::PARAM_STR);
-  $results->bindValue(3,$time_spent,PDO::PARAM_STR);
-  $results->bindValue(4,$learned,PDO::PARAM_STR);
-  $results->bindValue(5,$resources,PDO::PARAM_STR);
-  $results->execute();
+  include('dbconnect.php');
+  $sql = 'INSERT INTO entries(title,date,time_spent,learned,resources) VALUES(?,?,?,?,?)';
+  try {
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$title,PDO::PARAM_STR);
+    $results->bindValue(2,$date,PDO::PARAM_STR);
+    $results->bindValue(3,$time_spent,PDO::PARAM_STR);
+    $results->bindValue(4,$learned,PDO::PARAM_STR);
+    $results->bindValue(5,$resources,PDO::PARAM_STR);
+    $results->execute();
   } catch (Exception $e) {
-  echo $e->getMessage();
-  return false;
-}
-return true;
+    echo $e->getMessage();
+    return false;
+  }
+    return true;
 }
 
 // This function adds the entry_id and tag_id into the "entries_tags_link" table
@@ -148,7 +148,7 @@ function add_tags($entry_id,$tag_id) {
     return false;
   }
   return true;
-  }
+}
 
 // --------------------------------------------------------------------------//
 // -------------------------      UPDATES        ---------------------------//
@@ -157,25 +157,25 @@ function add_tags($entry_id,$tag_id) {
 // This function updates a journal entry in the database table "entries"
 // @param $title, $date, $time_spent, $learned and $resources are all obtained from the form input
 function edit_journal_entry($title,$date,$time_spent,$learned,$resources,$entry_id) {
-include('dbconnect.php');
-  
-$sql = "UPDATE entries SET title = ?,date = ?,time_spent = ?,learned = ?, resources = ? WHERE id = ?";
-  
-try {
-  $results = $db->prepare($sql);
-  $results->bindValue(1,$title,PDO::PARAM_STR);
-  $results->bindValue(2,$date,PDO::PARAM_STR);
-  $results->bindValue(3,$time_spent,PDO::PARAM_STR);
-  $results->bindValue(4,$learned,PDO::PARAM_STR);
-  $results->bindValue(5,$resources,PDO::PARAM_STR);
-  $results->bindValue(6,$entry_id,PDO::PARAM_INT);
-  $results->execute();
-  $db = null;
-} catch (Exception $e) {
-   echo $e->getMessage();
-return false;
-}
-return true;
+  include('dbconnect.php');
+    
+  $sql = "UPDATE entries SET title = ?,date = ?,time_spent = ?,learned = ?, resources = ? WHERE id = ?";
+    
+  try {
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$title,PDO::PARAM_STR);
+    $results->bindValue(2,$date,PDO::PARAM_STR);
+    $results->bindValue(3,$time_spent,PDO::PARAM_STR);
+    $results->bindValue(4,$learned,PDO::PARAM_STR);
+    $results->bindValue(5,$resources,PDO::PARAM_STR);
+    $results->bindValue(6,$entry_id,PDO::PARAM_INT);
+    $results->execute();
+    $db = null;
+  } catch (Exception $e) {
+    echo $e->getMessage();
+    return false;
+  }
+    return true;
 }
 
 // This function updates the tags from the edit.php page
@@ -194,9 +194,9 @@ function edit_tags($entry_id,$tag_id) {
     $db = null;
   } catch (Exception $e) {
      echo $e->getMessage();
-  return false;
+    return false;
   }
-  return true;
+    return true;
   }
 
 
@@ -214,16 +214,16 @@ function delete_entry($entry_id) {
   $sql = 'DELETE FROM entries WHERE id = ?';
       
   try {
-     $results = $db->prepare($sql);
-     $results->bindValue(1,$entry_id,PDO::PARAM_INT);
-     $results->execute();
-      // activate use of foreign key constraints
-  $db->exec( 'PRAGMA foreign_keys = ON;' );
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$entry_id,PDO::PARAM_INT);
+    $results->execute();
+    // activate use of foreign key constraints
+    $db->exec( 'PRAGMA foreign_keys = ON;' );
   } catch (Exception $e) {
      echo $e->getMessage();
-  return false;
+    return false;
   }
-   return $results->fetch();
+    return $results->fetch();
 }
 
 // This function deletes tags that are related to a journal entry
@@ -233,14 +233,14 @@ function delete_tags($entry_id) {
   $sql = 'DELETE FROM entries_tags_link WHERE entry_id = ?';
       
   try {
-     $results = $db->prepare($sql);
-     $results->bindValue(1,$entry_id,PDO::PARAM_INT);
-     $results->execute();
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$entry_id,PDO::PARAM_INT);
+    $results->execute();
   } catch (Exception $e) {
-     echo $e->getMessage();
-  return false;
+    echo $e->getMessage();
+    return false;
   }
-  return $results->fetch();
-  }
+    return $results->fetch();
+}
    
 ?>

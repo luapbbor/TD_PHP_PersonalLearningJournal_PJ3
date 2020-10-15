@@ -8,7 +8,6 @@ if(isset($_GET['id'])) {
     
     // put the array of tags related to this journal entry into the $tags variable
     $tags = get_tags($entry_id);
-  
 } 
 
 ?>
@@ -37,19 +36,20 @@ if(isset($_GET['id'])) {
         </header>
         <section>
             <div class="container">
+                 
                 <div class="entry-list single">
                     <article>
-                          <?php
+                        <?php
                           echo "<h1>" . $journal_entry['title'] . "</h1>";                        
                           echo "<time>" . $journal_entry['date'] . "</time>";
                         ?>
                         <div class="entry">
                             <h3>Time Spent: </h3>
-                        <p>    
-                         <?php
-                          echo $journal_entry['time_spent'];
-                         ?>
-                        </p> 
+                            <p>    
+                                <?php
+                                echo $journal_entry['time_spent'];
+                                ?>
+                            </p> 
                         </div>
                         <div class="entry">
                             <h3>What I Learned:</h3>
@@ -62,36 +62,33 @@ if(isset($_GET['id'])) {
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
                             <p>
-                            <?php 
+                                <?php 
                                 echo $journal_entry['resources'];
                                 ?>
                             </p>    
                         </div>
                         <div class="entry">
-                            <h3>Tags:</h3>
-                            
+                            <h3>Tags:</h3>                            
                             <ul>
                             <?php 
-                               foreach($tags as $tag) {   
-                               echo "<li>";      
-                                              
-                               echo "<a href='index.php?tag=" . $tag['tag_id']  ."'>" . $tag['tag_name'] . " </a>";
-                               echo "</li>";
-                               }                                
+                                foreach($tags as $tag) {   
+                                echo "<li>";      
+                                                
+                                echo "<a href='index.php?tag=" . $tag['tag_id']  ."'>" . $tag['tag_name'] . " </a>";
+                                echo "</li>";
+                                }                                
                             ?>
-                            </ul>                            
-                              
+                            </ul>                 
                         </div>
                     </article>
                 </div>
             </div>
             <div class="edit">
-            <p>
-            <?php    
-            echo "<a href='edit.php?id=" .$entry_id. "'>Edit Entry</a></li>";
-            ?>
-            </p>
-              
+                <p>
+                <?php    
+                echo "<a href='edit.php?id=" .$entry_id. "'>Edit Entry</a></li>";
+                ?>
+                </p>              
             </div>
         </section>
         <footer>

@@ -1,8 +1,5 @@
 <?php 
 
-// Remove before going live
-ini_set('display_errors','On');
-
 // Connect to database
 try {
 $db = new PDO('sqlite:./inc/journal.db');

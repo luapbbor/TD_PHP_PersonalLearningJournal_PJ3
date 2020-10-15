@@ -14,7 +14,7 @@ if(isset($_GET['id'])) {
 
 // When the form is posted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the input from the form
+    // Get the input from the form and filter 
     $title = filter_input(INPUT_POST, 'title',FILTER_SANITIZE_STRING);
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
     $time_spent = filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING);
@@ -26,10 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // else attempt to update the journal entry in the database
         if(edit_journal_entry($title,$date,$time_spent,$learned,$resources,$entry_id)){
+            // Delete all current tags related to the journal entry
             delete_tags($entry_id);
+            // Add the new tags selected in the edit form
             foreach($_POST['tags'] as $tag_id){
                 add_tags($entry_id,$tag_id);
             }
+            // If successfull redirect to detail page
             header('Location: detail.php?id=' . $entry_id);
             exit;
         } else {
@@ -38,8 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }    
 
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <section>
             <div class="container">
                 <div class="edit-entry">
-                <?php echo $error_message; ?>
+                    <p>
+                    <?php echo $error_message; ?>
+                    </p>
                     <h2>Edit Entry</h2>
                     <form method="post">
                         <label for="title"> Title</label>
@@ -80,17 +83,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember" ><?php echo $journal_entry['resources'];?></textarea>
                         <h3>Tags:</h3>
-                            
-                            <ul>
-    <input type="checkbox" name='tags[]' value="1"> PHP <br/>
-    <input type="checkbox" name='tags[]' value="2"> PDO <br/>
-    <input type="checkbox" name='tags[]' value="3"> HTML <br/>
-    <input type="checkbox" name='tags[]' value="4"> SQL <br/>
-    <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
-    <input type="checkbox" name='tags[]' value="6"> SASS<br/>
-    <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
-    <input type="checkbox" name='tags[]' value="8"> CSS <br/>
-                                                        </ul>     
+                        <ul>
+                            <input type="checkbox" name='tags[]' value="1"> PHP <br/>
+                            <input type="checkbox" name='tags[]' value="2"> PDO <br/>
+                            <input type="checkbox" name='tags[]' value="3"> HTML <br/>
+                            <input type="checkbox" name='tags[]' value="4"> SQL <br/>
+                            <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
+                            <input type="checkbox" name='tags[]' value="6"> SASS<br/>
+                            <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
+                            <input type="checkbox" name='tags[]' value="8"> CSS <br/>
+                        </ul>     
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="detail.php?id='<?php echo $entry_id;  ?>''" class="button button-secondary">Cancel</a>
                     </form>

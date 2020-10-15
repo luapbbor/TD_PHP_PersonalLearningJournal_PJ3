@@ -20,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(add_journal_entry($title,$date,$time_spent,$learned,$resources)){
            $error_message = "Your new journal entry has been added !";
         } else {
-            $error_message = "Sorry, could not add your Journal entry";
-           
+            $error_message = "Sorry, could not add your Journal entry";           
         }
     }
 }
 
 
 // When the submit button is pressed
+// Cannot put it into the previous $_SERVER['REQUEST_METHOD'] == 'POST' as the journal entry needs to be inserted into the database first
 if(isset($_POST['submit'])){
     // If any of the tag checkboxes are checked
     if(!empty($_POST['tags'])) {
@@ -69,7 +69,6 @@ if(isset($_POST['submit'])){
         </header>
         <section>
             <div class="container">
-                
                 <div class="new-entry">
                     <p>
                     <?php echo $error_message; ?>
@@ -86,21 +85,17 @@ if(isset($_POST['submit'])){
                         <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
-                        <h4>Tags</h4>
-                        
-    <input type="checkbox" name='tags[]' value="1"> PHP <br/>
-    <input type="checkbox" name='tags[]' value="2"> PDO <br/>
-    <input type="checkbox" name='tags[]' value="3"> HTML <br/>
-    <input type="checkbox" name='tags[]' value="4"> SQL <br/>
-    <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
-    <input type="checkbox" name='tags[]' value="6"> SASS<br/>
-    <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
-    <input type="checkbox" name='tags[]' value="8"> CSS <br/>
-                        
-                        
-                           
-                        
-                        
+                        <h3>Tags</h3>
+                        <ul>
+                            <input type="checkbox" name='tags[]' value="1"> PHP <br/>
+                            <input type="checkbox" name='tags[]' value="2"> PDO <br/>
+                            <input type="checkbox" name='tags[]' value="3"> HTML <br/>
+                            <input type="checkbox" name='tags[]' value="4"> SQL <br/>
+                            <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
+                            <input type="checkbox" name='tags[]' value="6"> SASS<br/>
+                            <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
+                            <input type="checkbox" name='tags[]' value="8"> CSS <br/>
+                        </ul> 
                         <input type="submit" name='submit' value="Publish Entry" class="button">
                         <a href="index.php" class="button button-secondary">Cancel</a>
                     </form>
