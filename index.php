@@ -12,9 +12,6 @@ $entry_id = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT);
         header('Location: index.php');
         exit;
     }
-
-    
-    
 }
   
 
@@ -44,45 +41,59 @@ $entry_id = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT);
         </header>
         <section>
             <div class="container">
-                <div class="entry-list">
-                <?php
-                foreach(get_journal_entries() as $entry) {
-                    echo "<article>";
-                    echo "<h2>";
-                    echo "<li><a href='detail.php?id=" .$entry['id'] . "'>" .
-                    $entry['title'] . "</a></li>";
-                    echo "<time>";
-                    echo $entry['date'];
-                    echo "</time>";
-                    echo "</h2>";
-                    echo "<form method='post' action='index.php' onsubmit=\"return
-                    confirm('Are you sure you want to delete this task?');\">\n";
-              echo "<input type='hidden' value='". $entry['id'] . "' name='delete'
-                   ?>\n";
-              echo "<input type='submit' class='button button-secondary' value='Delete' />\n";
-              echo "</form>";
-                          
-                    echo "</article>";
-                   
-                }
+            <div class="entry-list">    
+                <?php 
+                // If "tag" is in the URL
+                if(isset($_GET['tag'])) {
+                    // filter the input
+                    $tag_id = filter_input(INPUT_GET, 'tag',FILTER_SANITIZE_NUMBER_INT);
+                    // Get all journal entries with the tag id that is in the URL
+                    foreach (get_entries_by_tag($tag_id) as $entry) {
+                        echo "<article>";
+                        echo "<h2>";
+                        echo "<li><a href='detail.php?id=" .$entry['id'] . "'>" .
+                        $entry['title'] . "</a></li>";
+                        echo "<time>";
+                        echo $entry['date'];
+                        echo "</time>";
+                        echo "</h2>";
+                        $entry_id = $entry['id'];
+                        foreach( get_tags($entry_id) as $tag){
+                        echo "<a href='index.php?tag=" . $tag['tag_id']  ."'>" . " " . $tag['tag_name'] . " " . " </a>";
+                        }
+                        echo "<form method='post' action='index.php' onsubmit=\"return
+                        confirm('Are you sure you want to delete this task?');\">\n";
+                        echo "<input type='hidden' value='". $entry['id'] . "' name='delete'
+                        ?>\n";
+                        echo "<input type='submit' class='button button-secondary' value='Delete' />\n";
+                        echo "</form>";
+                        echo "</article>";
+                    }
                 
-                ?>
-                    <!-- <article> 
-                        <h2><a href="detail.php">The best day I’ve ever had</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
-                    <article>
-                        <h2><a href="detail_2.php">The absolute worst day I’ve ever had</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
-                    <article>
-                        <h2><a href="detail_3.php">That time at the mall</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
-                    <article>
-                        <h2><a href="detail_4.php">Dude, where’s my car?</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
-                    </article> -->
+                } else {
+                    foreach(get_journal_entries() as $entry) {
+                        echo "<article>";
+                        echo "<h2>";
+                        echo "<li><a href='detail.php?id=" .$entry['id'] . "'>" .
+                        $entry['title'] . "</a></li>";
+                        echo "<time>";
+                        echo $entry['date'];
+                        echo "</time>";
+                        echo "</h2>";
+                        $entry_id = $entry['id'];
+                        foreach( get_tags($entry_id) as $tag){
+                        echo "<a href='index.php?tag=" . $tag['tag_id']  ."'>" . " " . $tag['tag_name'] . " " . " </a>";
+                        }
+                        echo "<form method='post' action='index.php' onsubmit=\"return
+                        confirm('Are you sure you want to delete this task?');\">\n";
+                        echo "<input type='hidden' value='". $entry['id'] . "' name='delete'
+                        ?>\n";
+                        echo "<input type='submit' class='button button-secondary' value='Delete' />\n";
+                        echo "</form>";echo "</article>";
+                                
+                    }
+                }
+                ?>                   
                 </div>
             </div>
         </section>

@@ -6,6 +6,7 @@ if(isset($_GET['id'])) {
     $entry_id = filter_input(INPUT_GET, 'id',FILTER_SANITIZE_NUMBER_INT);
     $journal_entry = get_journal_entry($entry_id);
     
+    // put the array of tags related to this journal entry into the $tags variable
     $tags = get_tags($entry_id);
   
 } 
@@ -72,8 +73,9 @@ if(isset($_GET['id'])) {
                             <ul>
                             <?php 
                                foreach($tags as $tag) {   
-                               echo "<li>";                        
-                               echo "<a href='tags.php'>" . $tag['tag_name'] . " </a>";
+                               echo "<li>";      
+                                              
+                               echo "<a href='index.php?tag=" . $tag['tag_id']  ."'>" . $tag['tag_name'] . " </a>";
                                echo "</li>";
                                }                                
                             ?>

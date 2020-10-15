@@ -33,6 +33,21 @@ try {
 } 
 }
 
+// Gets all the tags from the tags table
+function get_all_tags() {
+  include('dbconnect.php');
+  $sql = 'SELECT * FROM tags';
+  try {
+
+    $results = $db->prepare($sql);
+    $results->execute();
+    return $results->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+    echo "Error!:" . $e->getMessage() . "</br>";
+    return array();
+  } 
+}
+
 // This function gets a list of tags that are related to the journal entry.
 // @param $entry_id is obtain from the URL
 function get_tags($entry_id) {
@@ -52,6 +67,27 @@ function get_tags($entry_id) {
     return false;
   }  
  }
+
+// This function gets a list of entries that are related to a tag
+// @param $tag_id is obtain from the URL
+function get_entries_by_tag($tag_id) {
+  include('dbconnect.php');
+  
+  $sql = 'SELECT * FROM entries
+          INNER JOIN entries_tags_link
+          ON entries.id = entries_tags_link.entry_id
+          WHERE entries_tags_link.tag_id = ? ORDER BY date DESC';    
+  try {
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$tag_id,PDO::PARAM_INT);
+    $results->execute();
+    return $results->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+    echo $e->getMessage();
+    return false;
+  }  
+ }
+
 
 // This function returns the id of the last entered journal entry from the "entries" table
 function get_latest_entry() {
@@ -76,25 +112,6 @@ function get_latest_entry() {
 // -------------------------      INSERTS        ---------------------------//
 // --------------------------------------------------------------------------//
 
-// This function adds the entry_id and tag_id into the "entries_tags_link" table
-// Entry id is pulled from the get_latest_entry() function
-// tag id is pulled from the form when it is submitted
-function add_tags($entry_id,$tag_id) {
-  include('dbconnect.php');
-  $sql = 'INSERT INTO entries_tags_link(entry_id,tag_id) VALUES(?,?)';
-  try {
-    $results = $db->prepare($sql);
-    $results->bindValue(1,$entry_id,PDO::PARAM_INT);
-    $results->bindValue(2,$tag_id,PDO::PARAM_INT);
-     $results->execute();
-  } catch (Exception $e) {
-    echo $e->getMessage();
-    return false;
-  }
-  return true;
-  }
-
-
 // This function adds a new journal entry into the database table "entries"
 // @param $title, $date, $time_spent, $learned and $resources are all obtained from the form input
 function add_journal_entry($title,$date,$time_spent,$learned,$resources) {
@@ -114,6 +131,24 @@ try {
 }
 return true;
 }
+
+// This function adds the entry_id and tag_id into the "entries_tags_link" table
+// Entry id is pulled from the get_latest_entry() function
+// tag id is pulled from the form when it is submitted
+function add_tags($entry_id,$tag_id) {
+  include('dbconnect.php');
+  $sql = 'INSERT INTO entries_tags_link(entry_id,tag_id) VALUES(?,?)';
+  try {
+    $results = $db->prepare($sql);
+    $results->bindValue(1,$entry_id,PDO::PARAM_INT);
+    $results->bindValue(2,$tag_id,PDO::PARAM_INT);
+     $results->execute();
+  } catch (Exception $e) {
+    echo $e->getMessage();
+    return false;
+  }
+  return true;
+  }
 
 // --------------------------------------------------------------------------//
 // -------------------------      UPDATES        ---------------------------//
@@ -142,6 +177,28 @@ return false;
 }
 return true;
 }
+
+// This function updates the tags from the edit.php page
+// @param $entry_id is the journal entry id obtained from the URL
+// @param $tag_id is obtained from a foreach loop that loops through each checked value
+function edit_tags($entry_id,$tag_id) {
+  include('dbconnect.php');
+    
+  $sql = "UPDATE entries_tags_link SET tag_id = ? WHERE entry_id = ?";
+    
+  try {
+    $results = $db->prepare($sql);
+    $results->bindParam(1,$tag_id,PDO::PARAM_INT);
+    $results->bindParam(2,$entry_id,PDO::PARAM_INT);
+    $results->execute();
+    $db = null;
+  } catch (Exception $e) {
+     echo $e->getMessage();
+  return false;
+  }
+  return true;
+  }
+
 
 
 

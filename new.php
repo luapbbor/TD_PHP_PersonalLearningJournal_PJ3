@@ -10,11 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $time_spent = filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING);
     $learned = filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING);
     $resources = filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING);
-    
- 
-    
    
-  
 
     // If title, time spent or learned are empty show error
     if (empty($title) || empty($time_spent)|| empty($learned)) {
@@ -22,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Else call the function to add the new journal entry into the database
         if(add_journal_entry($title,$date,$time_spent,$learned,$resources)){
-           
+           $error_message = "Your new journal entry has been added !";
         } else {
             $error_message = "Sorry, could not add your Journal entry";
            
@@ -42,12 +38,10 @@ if(isset($_POST['submit'])){
     // get the tag id of each tag that was checked     
     foreach($_POST['tags'] as $tag_id){
     // Insert into the entries_tags_link table with the "add_tags" function
-    add_tags($entry_id,$tag_id);
-      
-    }
+    add_tags($entry_id,$tag_id);    
     }
 }
-
+}
 ?> 
 
 
@@ -77,7 +71,9 @@ if(isset($_POST['submit'])){
             <div class="container">
                 
                 <div class="new-entry">
-                                   <?php echo $error_message; ?>
+                    <p>
+                    <?php echo $error_message; ?>
+                    </p>
                     <h2>New Entry</h2>
                     <form method="post">
                         <label for="title"> Title</label>
@@ -97,8 +93,9 @@ if(isset($_POST['submit'])){
     <input type="checkbox" name='tags[]' value="3"> HTML <br/>
     <input type="checkbox" name='tags[]' value="4"> SQL <br/>
     <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
-    <input type="checkbox" name='tags[]' value="4"> SASS<br/>
-    <input type="checkbox" name='tags[]' value="5"> Bootstrap <br/>
+    <input type="checkbox" name='tags[]' value="6"> SASS<br/>
+    <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
+    <input type="checkbox" name='tags[]' value="8"> CSS <br/>
                         
                         
                            

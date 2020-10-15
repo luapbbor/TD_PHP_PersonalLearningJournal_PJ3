@@ -7,7 +7,9 @@ if(isset($_GET['id'])) {
     $entry_id = filter_input(INPUT_GET, 'id',FILTER_SANITIZE_NUMBER_INT);
     // Assigns the function get_journal_entry to the variable $journal_entry as an array
     $journal_entry = get_journal_entry($entry_id);
-} 
+    $journal_entry_tags = get_tags($entry_id);
+    $all_tags = get_all_tags();   
+    } 
 
 
 // When the form is posted
@@ -24,6 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // else attempt to update the journal entry in the database
         if(edit_journal_entry($title,$date,$time_spent,$learned,$resources,$entry_id)){
+            delete_tags($entry_id);
+            foreach($_POST['tags'] as $tag_id){
+                add_tags($entry_id,$tag_id);
+            }
             header('Location: detail.php?id=' . $entry_id);
             exit;
         } else {
@@ -59,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </header>
         <section>
             <div class="container">
-            
                 <div class="edit-entry">
                 <?php echo $error_message; ?>
                     <h2>Edit Entry</h2>
@@ -74,6 +79,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <textarea id="what-i-learned" rows="5" name="whatILearned" ><?php echo $journal_entry['learned'];?></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember" ><?php echo $journal_entry['resources'];?></textarea>
+                        <h3>Tags:</h3>
+                            
+                            <ul>
+    <input type="checkbox" name='tags[]' value="1"> PHP <br/>
+    <input type="checkbox" name='tags[]' value="2"> PDO <br/>
+    <input type="checkbox" name='tags[]' value="3"> HTML <br/>
+    <input type="checkbox" name='tags[]' value="4"> SQL <br/>
+    <input type="checkbox" name='tags[]' value="5"> Javascript <br/>
+    <input type="checkbox" name='tags[]' value="6"> SASS<br/>
+    <input type="checkbox" name='tags[]' value="7"> Bootstrap <br/>
+    <input type="checkbox" name='tags[]' value="8"> CSS <br/>
+                                                        </ul>     
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="detail.php?id='<?php echo $entry_id;  ?>''" class="button button-secondary">Cancel</a>
                     </form>

@@ -2,5 +2,5 @@
 error_reporting(E_ALL);
 ini_set('display_errors','On');
 
-include('detail.php');
+include('new.php');
 ?>
